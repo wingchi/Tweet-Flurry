@@ -7,20 +7,24 @@
 //
 
 import UIKit
+import TwitterKit
 
 class HomeTimelineViewController: TWTRTimelineViewController {
-
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        
+        if let userID = Twitter.sharedInstance().sessionStore.session()?.userID {
+            let client = TWTRAPIClient(userID: userID)
+            // make requests with client
+            self.dataSource = TWTRSearchTimelineDataSource(searchQuery: "#design", APIClient: client)
+        }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        navigationItem.title = "Tweets"
+    }
 
     /*
     // MARK: - Navigation
